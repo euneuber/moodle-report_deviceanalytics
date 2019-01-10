@@ -126,12 +126,12 @@ class Browscap
      * @var $remoteIniUrl: The location from which download the ini file.
      *                     The placeholder for the file should be represented by a %s.
      */
-    public $remoteIniUrl = 'http://browscap.org/stream?q=PHP_BrowscapINI';
+    public $remoteIniUrl = 'https://browscap.org/stream?q=PHP_BrowscapINI';
     /**
      * @var $remoteVerUrl: The location to use to check out if a new version of the
      *                     browscap.ini file is available.
      */
-    public $remoteVerUrl = 'http://browscap.org/version';
+    public $remoteVerUrl = 'https://browscap.org/version';
     /**
      * @var $timeout: The timeout for the requests.
      */
@@ -168,7 +168,7 @@ class Browscap
      *
      * @var string
      */
-    public $userAgent = 'http://browscap.org/ - PHP Browscap/%v %m';
+    public $userAgent = 'https://browscap.org/ - PHP Browscap/%v %m';
 
     /**
      * Flag to enable only lowercase indexes in the result.
@@ -423,7 +423,7 @@ class Browscap
                     $key         = $patternData;
                     $simpleMatch = true;
                 } else {
-                    $patternData = unserialize($patternData);
+                    $patternData = unserialize($patternData, ['allowed_classes' => false]);
 
                     // match with numeric replacements
                     array_shift($matches);
@@ -447,10 +447,10 @@ class Browscap
                     $this->_pregUnQuote($pattern, $simpleMatch ? false : $matches)
                 );
 
-                $browser = $value = $browser + unserialize($this->_browsers[$key]);
+                $browser = $value = $browser + unserialize($this->_browsers[$key], ['allowed_classes' => false]);
 
                 while (array_key_exists(3, $value)) {
-                    $value = unserialize($this->_browsers[$value[3]]);
+                    $value = unserialize($this->_browsers[$value[3]], ['allowed_classes' => false]);
                     $browser += $value;
                 }
 
@@ -560,20 +560,20 @@ class Browscap
 
         $clearedWrappers = array();
         $options         = array('proxy', 'request_fulluri', 'header');
-        foreach ($wrappers as $wrapper) {
+        foreach ($wrappers as $wr) {
 
             // remove wrapper options related to proxy settings
-            if (isset($this->_streamContextOptions[$wrapper]['proxy'])) {
+            if (isset($this->_streamContextOptions[$wr]['proxy'])) {
                 foreach ($options as $option) {
-                    unset($this->_streamContextOptions[$wrapper][$option]);
+                    unset($this->_streamContextOptions[$wr][$option]);
                 }
 
                 // remove wrapper entry if there are no other options left
-                if (empty($this->_streamContextOptions[$wrapper])) {
-                    unset($this->_streamContextOptions[$wrapper]);
+                if (empty($this->_streamContextOptions[$wr])) {
+                    unset($this->_streamContextOptions[$wr]);
                 }
 
-                $clearedWrappers[] = $wrapper;
+                $clearedWrappers[] = $wr;
             }
         }
 
@@ -1341,7 +1341,7 @@ class Browscap
             if (is_array($value)) {
                 $value = "'" . addcslashes(serialize($value), "'") . "'";
             } elseif (ctype_digit((string) $value)) {
-                $value = intval($value);
+                $value = (int)$value;
             } else {
                 $value = "'" . str_replace("'", "\'", $value) . "'";
             }

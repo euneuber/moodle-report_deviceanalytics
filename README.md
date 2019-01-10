@@ -6,7 +6,7 @@ Currently datas are:
  - Browser | with Version logging
  - Displaysize | if js is enabled
  - Windowsize | if js is enabled
- - Inputtype | like mouse or touchscreen
+ - Input type | like mouse or touchscreen
 
 ### Language
 The Plugin supports 2 languages:
@@ -15,13 +15,16 @@ The Plugin supports 2 languages:
  
 ### Version
 Current version: **2016051700** 
-moodle requires: **2014111000** 
-moodle versions: 2.8, 2.9 
+
+moodle requires: **2014111000**
+
+moodle versions: 2.8, 2.9, **3.4**
+
 will be installed into /report/deviceanalytics
 
 ### Credits
 For HTTP Header interpreting this plugin is using: 
-http://browscap.org/ - Version: 2.1.1
+https://browscap.org/ - Version: 2.1.1
 MIT License
 
 Chart.js - For Dashboard Charts
