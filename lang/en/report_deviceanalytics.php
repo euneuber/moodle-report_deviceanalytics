@@ -61,3 +61,8 @@ $string['settings_anonymous_description'] = 'If the user data will be stored ano
 $string['settings_admin_log'] = 'Admin Log';
 $string['settings_cancelled'] = 'Nothing was changed!';
 $string['settings_updated'] = 'Settings was updated successfully!';
+
+$string['dashboard_chart_displaysizes_weight'] = 'Percent of display sizes';
+$string['dashboard_chart_windowsizes_weight'] = 'Percent of window sizes';
+$string['dashboard_chart_pixel_ratio'] = 'Percent of scaling factors';
+$string['pixel_ratio'] = 'scaling factor';

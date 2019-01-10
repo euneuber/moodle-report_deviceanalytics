@@ -25,8 +25,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once('../locallib.php');
+require_once __DIR__ .'/../../../config.php';
+require_once __DIR__ . '/../locallib.php';
 
 $systemcontext = context_system::instance();
 
@@ -60,7 +60,7 @@ echo $OUTPUT->heading(get_string('dashboard_name', 'report_deviceanalytics'));
 echo '<noscript>';
 echo $OUTPUT->error_text(get_string('dashboard_nojs_error_message', 'report_deviceanalytics'));
 echo '</noscript>';
-if ((is_null($analyticsdata))||(empty($analyticsdata))) {
+if (($analyticsdata === null)||empty($analyticsdata)) {
     echo $OUTPUT->error_text(get_string('dashboard_no_data_error', 'report_deviceanalytics'));
 } else {
     echo $OUTPUT->heading(get_string('dashboard_time_title', 'report_deviceanalytics'), 4);

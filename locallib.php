@@ -57,7 +57,7 @@ function report_deviceanalytics_load_datas($starttime = null, $endtime = null) {
  * Creates the Outputcontainer for dashboard.php
  * @param Array $chartout array of containers
  * @param Array $vtables array of html_tables
- * @return String all containers for output
+ * @return Array all containers for output
  */
 function report_deviceanalytics_create_containers($chartout, $vtables) {
     $vout = array();
@@ -91,6 +91,21 @@ function report_deviceanalytics_create_containers($chartout, $vtables) {
         'dashboard_chart_pointing_method',
         $chartout[5],
         $vtables[5]);
+    $vout[] = report_deviceanaltics_create_wrapper_container(
+        'windowsizes_weight',
+        'dashboard_chart_displaysizes_weight',
+        $chartout[6],
+        $vtables[6]);
+    $vout[] = report_deviceanaltics_create_wrapper_container(
+        'windowsizes_weight',
+        'dashboard_chart_windowsizes_weight',
+        $chartout[7],
+        $vtables[7]);
+    $vout[] = report_deviceanaltics_create_wrapper_container(
+        'pixel_ratio',
+        'dashboard_chart_pixel_ratio',
+        $chartout[8],
+        $vtables[8]);
     return $vout;
 }
 
@@ -179,7 +194,7 @@ function report_deviceanaltics_create_wrapper_container($wrappername, $headernam
 /**
  * Calculate the Tables
  * @param Array $datas - preselected entries form data table
- * @return String $returntables output-string
+ * @return Array $returntables output-string
  */
 function report_deviceanalytics_create_data_tables($datas) {
     $returntables = array();
@@ -264,6 +279,58 @@ function report_deviceanalytics_create_data_tables($datas) {
         $returntables[5]->data[] = array($tname, report_device_analytics_calc_percent($devicepointing, $tname)."%", $count);
     }
 
+    $returntables[6] = new html_table();
+    $returntables[6]->head = (array) get_strings(array('dashboard_chart_screen_sizes', 'table_percent', 'table_count'), 'report_deviceanalytics');
+    $weight = [];
+    foreach ($datas as $devicepointdata) {
+        $ptype = $devicepointdata->devicedisplaysizex . ' x ' . $devicepointdata->devicedisplaysizey;
+        if (array_key_exists($ptype, $weight)) {
+            $weight[$ptype]++;
+        } else {
+            $weight[$ptype] = 1;
+        }
+    }
+    arsort($weight, SORT_NUMERIC);
+    foreach ($weight as $tname => $count) {
+        $returntables[6]->data[] = array($tname, report_device_analytics_calc_percent($weight, $tname). '%', $count);
+    }
+
+    $returntables[7] = new html_table();
+    $returntables[7]->head = (array) get_strings(array('dashboard_chart_window_sizes', 'table_percent', 'table_count'), 'report_deviceanalytics');
+    $weight = [];
+    foreach ($datas as $devicepointdata) {
+        $ptype = $devicepointdata->devicewindowsizex . ' x ' . $devicepointdata->devicewindowsizey;
+        if (array_key_exists($ptype, $weight)) {
+            $weight[$ptype]++;
+        } else {
+            $weight[$ptype] = 1;
+        }
+    }
+    arsort($weight, SORT_NUMERIC);
+    foreach ($weight as $tname => $count) {
+        $returntables[7]->data[] = array($tname, report_device_analytics_calc_percent($weight, $tname). '%', $count);
+    }
+
+    $returntables[8] = new html_table();
+    $returntables[8]->head = (array) get_strings(array('pixel_ratio', 'table_percent', 'table_count'), 'report_deviceanalytics');
+    $weight = [];
+    foreach ($datas as $devicepointdata) {
+        $value = (1.0 * $devicepointdata->devicedisplaysizex) / $devicepointdata->devicewindowsizex;
+        if ($value < 1.0) {
+            $value = 1.0 / $value;
+        }
+        $ptype = sprintf('%01.1f', $value);
+        if (array_key_exists($ptype, $weight)) {
+            $weight[$ptype]++;
+        } else {
+            $weight[$ptype] = 1;
+        }
+    }
+    arsort($weight, SORT_NUMERIC);
+    foreach ($weight as $tname => $count) {
+        $returntables[8]->data[] = array($tname, report_device_analytics_calc_percent($weight, $tname). '%', $count);
+    }
+
     return $returntables;
 }
 
@@ -279,5 +346,8 @@ function report_deviceanalytics_create_charts() {
     $returncharts[3] = '<canvas class="rd_chart" id="chart_devicedisplaysize"></canvas>';
     $returncharts[4] = '<canvas class="rd_chart" id="chart_devicewindowsize"></canvas>';
     $returncharts[5] = null;
+    $returncharts[6] = null;
+    $returncharts[7] = null;
+    $returncharts[8] = null;
     return $returncharts;
 }

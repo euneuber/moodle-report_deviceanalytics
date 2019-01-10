@@ -59,3 +59,8 @@ $string['settings_anonymous_description'] = 'ob Nutzerdaten zuortbar seien solle
 $string['settings_admin_log'] = 'Admin Log';
 $string['settings_cancelled'] = 'Es wurde nichts verändert!';
 $string['settings_updated'] = 'Einstellungen wurden erfolgreich aktualisiert!';
+
+$string['dashboard_chart_displaysizes_weight'] = 'Anteil der Bildschirmgrößen';
+$string['dashboard_chart_windowsizes_weight'] = 'Anteil der Fenstergrößen';
+$string['dashboard_chart_pixel_ratio'] = 'Anteil der Vergrößerungsfaktoren';
+$string['pixel_ratio'] = 'Vergrößerungsfaktor';
